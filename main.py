@@ -21,4 +21,14 @@ HIT_SNOW_BALL_SOUND=pygame.mixer.Sound('Source/Hit_Snowball.mp3')
 HP_FONT = pygame.font.SysFont('comicsans',40)
 WINNER_FONT = pygame.font.SysFont('comicsans',100)
 
+FPS = 60
+SPEED = 5
+SNOWBALL_SPEED = 7
+MAX_SNOWBALL = 2
+CHARACTER_WIDTH = 55
+CHARACTER_HEIGHT = 40
+
+BOY_HIT = pygame.USEREVENT + 1
+GIRL_HIT = pygame.USEREVENT + 2
+
 
