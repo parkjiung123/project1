@@ -129,17 +129,21 @@ def main():
                     snowball = pygame.Rect(
                             boy.x + boy.width, boy.y + boy.height//2 - 2, 10, 5)
                     boy_snowball.append(snowball)
+                    THROW_SNOW_BALL_SOUND.play()
                 
                 if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
                     snowball = pygame.Rect(
                             girl.x, girl.y + girl.height//2 - 2, 10, 5)
                     girl_snowball.append(snowball)
+                    THROW_SNOW_BALL_SOUND.play()
 
             if event.type == GIRL_HIT:
                 girl_hp -= 1
+                HIT_SNOW_BALL_SOUND.play()
 
             if event.type == BOY_HIT:
                 boy_hp -=1
+                HIT_SNOW_BALL_SOUND.play()
 
         winner_text=""
         if girl_hp <=0:
