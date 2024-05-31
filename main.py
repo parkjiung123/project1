@@ -42,3 +42,25 @@ GIRL = pygame.transform.scale(
 
 BACKGROUND=pygame.transform.scale(pygame.image.load(os.path.join('Source','Background.jpg')),(WIDTH,HEIGHT))
 
+def draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp):
+    WIN.blit(BACKGROUND,(0,0))
+    pygame.draw.rect(WIN,BLACK,BORDER)
+
+    girl_hp_text=HP_FONT.render("HP: " + str(girl_hp),1,WHITE)
+    boy_hp_text=HP_FONT.render("HP: "+ str(boy_hp),1,WHITE)
+    WIN.blit(girl_hp_text,(WIDTH-girl_hp_text.getwidth()-10,10))
+    WIN.blit(boy_hp_text,(10,10))
+
+    WIN.blit(BOY,(boy.x,boy.y))
+    WIN.blit(GIRL,(girl.x,girl.y))
+
+    for snowball in girl_snowball:
+        pygame.draw.rect(WIN,RED, snowball)
+
+    for snowball in boy_snowball:
+        pygame.draw.rect(WIN, YELLOW,snowball)
+
+    pygame.display.update()
+
+
+
