@@ -81,3 +81,20 @@ def girl_handle_movement(keys_pressed,girl):
         girl.y -= SPEED
     if keys_pressed[pygame.K_DOWN] and girl.y + SPEED + girl.height < HEIGHT - 15:
         girl.y += SPEED
+
+def handle_snowball(boy_snowball,girl_snowball,boy,girl):
+    for snowball in boy_snowball:
+        snowball.x += SNOWBALL_SPEED
+        if girl.colliderect(snowball):
+            pygame.event.post(pygame.event.Event(GIRL_HIT))
+            boy_snowball.remove(snowball)
+        elif snowball.x > WIDTH:
+            boy_snowball.remove(snowball)
+
+    for snowball in girl_snowball:
+        snowball.x -= SNOWBALL_SPEED
+        if boy.colliderect(snowball):
+            pygame.event.post(pygame.event.Event(BOY_HIT))
+            girl_snowball.remove(snowball)
+        elif snowball.x <0:
+            girl_snowball.remove(snowball)
