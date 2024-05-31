@@ -14,3 +14,6 @@ RED=(255,0,0)
 YELLOW=(255,255,0)
 
 BORDER=pygame.Rect(WIDTH//2-5,0,10,HEIGHT)
+
+THROW_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Throw_Snowball.mp3')
+HIT_SNOW_BALL_SOUND=pygame.mixer.Sound('Source/Hit_Snowball.mp3')
