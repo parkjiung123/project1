@@ -17,3 +17,8 @@ BORDER=pygame.Rect(WIDTH//2-5,0,10,HEIGHT)
 
 THROW_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Throw_Snowball.mp3')
 HIT_SNOW_BALL_SOUND=pygame.mixer.Sound('Source/Hit_Snowball.mp3')
+
+HP_FONT = pygame.font.SysFont('comicsans',40)
+WINNER_FONT = pygame.font.SysFont('comicsans',100)
+
+
