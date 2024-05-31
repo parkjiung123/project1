@@ -31,4 +31,11 @@ CHARACTER_HEIGHT = 40
 BOY_HIT = pygame.USEREVENT + 1
 GIRL_HIT = pygame.USEREVENT + 2
 
-
+BOY_IMAGE = pygame.image.load(
+    os.path.join('Source','Boy.png'))
+BOY = pygame.transform.scale(
+    BOY_IMAGE,(BOY,CHARACTER_WIDTH,CHARACTER_HEIGHT))
+GIRL_IMAGE = pygame.image.load(
+    os.path.join('Source','Girl.png'))
+GIRL = pygame.transform.scale(
+    GIRL_IMAGE,(GIRL,CHARACTER_WIDTH,CHARACTER_HEIGHT))
