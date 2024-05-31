@@ -34,11 +34,11 @@ GIRL_HIT = pygame.USEREVENT + 2
 BOY_IMAGE = pygame.image.load(
     os.path.join('Source','Boy.png'))
 BOY = pygame.transform.scale(
-    BOY_IMAGE,(BOY,CHARACTER_WIDTH,CHARACTER_HEIGHT))
+    BOY_IMAGE,(CHARACTER_WIDTH,CHARACTER_HEIGHT))
 GIRL_IMAGE = pygame.image.load(
     os.path.join('Source','Girl.png'))
 GIRL = pygame.transform.scale(
-    GIRL_IMAGE,(GIRL,CHARACTER_WIDTH,CHARACTER_HEIGHT))
+    GIRL_IMAGE,(CHARACTER_WIDTH,CHARACTER_HEIGHT))
 
 BACKGROUND=pygame.transform.scale(pygame.image.load(os.path.join('Source','Background.jpg')),(WIDTH,HEIGHT))
 
@@ -46,9 +46,9 @@ def draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp):
     WIN.blit(BACKGROUND,(0,0))
     pygame.draw.rect(WIN,BLACK,BORDER)
 
-    girl_hp_text=HP_FONT.render("HP: " + str(girl_hp),1,WHITE)
-    boy_hp_text=HP_FONT.render("HP: "+ str(boy_hp),1,WHITE)
-    WIN.blit(girl_hp_text,(WIDTH-girl_hp_text.getwidth()-10,10))
+    girl_hp_text=HP_FONT.render("HP: " + str(girl_hp),1,BLACK)
+    boy_hp_text=HP_FONT.render("HP: "+ str(boy_hp),1,BLACK)
+    WIN.blit(girl_hp_text,(WIDTH-girl_hp_text.get_width()-10,10))
     WIN.blit(boy_hp_text,(10,10))
 
     WIN.blit(BOY,(boy.x,boy.y))
@@ -100,7 +100,7 @@ def handle_snowball(boy_snowball,girl_snowball,boy,girl):
             girl_snowball.remove(snowball)
 
 def draw_winner(text):
-    draw_text =WINNER_FONT.render(text,1,WHITE)
+    draw_text =WINNER_FONT.render(text,1,BLACK)
     WIN.blit(draw_text,(WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
     pygame.time.delay(5000)
@@ -143,10 +143,10 @@ def main():
 
         winner_text=""
         if girl_hp <=0:
-            winner_text="Boy Wins The Game!"
+            winner_text="Boy Wins!"
 
         if boy_hp <=0:
-            winner_text="Girl Wins The Game!"
+            winner_text="Girl Wins!"
 
         if winner_text !="":
             draw_winner(winner_text)
