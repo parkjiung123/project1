@@ -41,3 +41,4 @@ GIRL = pygame.transform.scale(
     GIRL_IMAGE,(GIRL,CHARACTER_WIDTH,CHARACTER_HEIGHT))
 
 BACKGROUND=pygame.transform.scale(pygame.image.load(os.path.join('Source','Background.jpg')),(WIDTH,HEIGHT))
+
