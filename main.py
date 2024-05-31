@@ -104,3 +104,62 @@ def draw_winner(text):
     WIN.blit(draw_text,(WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
     pygame.time.delay(5000)
+
+def main():
+    girl = pygame.Rect(700, 300, CHARACTER_WIDTH,CHARACTER_HEIGHT)
+    boy = pygame.Rect(100,300, CHARACTER_WIDTH,CHARACTER_HEIGHT)
+
+    girl_snowball = []
+    boy_snowball = []
+
+    girl_hp = 10
+    boy_hp = 10
+
+    clock = pygame.time.Clock()
+    run = True
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_v and len(boy_snowball) < MAX_SNOWBALL:
+                    snowball = pygame.Rect(
+                            boy.x + boy.width, boy.y + boy.height//2 - 2, 10, 5)
+                    boy_snowball.append(snowball)
+                
+                if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
+                    snowball = pygame.Rect(
+                            girl.x, girl.y + girl.height//2 - 2, 10, 5)
+                    girl_snowball.append(snowball)
+
+            if event.type == GIRL_HIT:
+                girl_hp -= 1
+
+            if event.type == BOY_HIT:
+                boy_hp -=1
+
+        winner_text=""
+        if girl_hp <=0:
+            winner_text="Boy Wins The Game!"
+
+        if boy_hp <=0:
+            winner_text="Girl Wins The Game!"
+
+        if winner_text !="":
+            draw_winner(winner_text)
+            break
+
+        keys_pressed = pygame.key.get_pressed()
+        boy_handle_movement(keys_pressed,boy)
+        girl_handle_movement(keys_pressed,girl)
+
+        handle_snowball(boy_snowball,girl_snowball,boy,girl)
+        draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp)
+
+    main()
+
+if __name__ =="__main__":
+    main()
