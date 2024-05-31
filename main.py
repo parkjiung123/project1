@@ -62,5 +62,22 @@ def draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp):
 
     pygame.display.update()
 
+def boy_handle_movement(keys_pressed,boy):
+    if keys_pressed[pygame.K_a] and boy.x - SPEED > 0:
+        boy.x -= SPEED
+    if keys_pressed[pygame.K_d] and boy.x + SPEED + boy.width < BORDER.x:
+        boy.x += SPEED
+    if keys_pressed[pygame.K_w] and boy.y - SPEED > 0:
+        boy.y -= SPEED
+    if keys_pressed[pygame.K_s] and boy.y + SPEED + boy.height < HEIGHT - 15:
+        boy.y += SPEED
 
-
+def girl_handle_movement(keys_pressed,girl):
+    if keys_pressed[pygame.K_LEFT] and girl.x - SPEED > BORDER.x + BORDER.width:
+        girl.x -= SPEED
+    if keys_pressed[pygame.K_RIGHT] and girl.x + SPEED + girl.width < WIDTH:
+        girl.x += SPEED
+    if keys_pressed[pygame.K_UP] and girl.y - SPEED > 0:
+        girl.y -= SPEED
+    if keys_pressed[pygame.K_DOWN] and girl.y + SPEED + girl.height < HEIGHT - 15:
+        girl.y += SPEED
