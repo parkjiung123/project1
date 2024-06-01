@@ -3,7 +3,7 @@ import os
 import random
 
 pygame.font.init()
-pygame.mixer.init()
+#pygame.mixer.init()
 
 WIDTH = 900
 HEIGHT = 500
