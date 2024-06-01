@@ -59,27 +59,30 @@ docker run -it snow-ball:1
 
 ### Function
 - draw_display
-    1. Parameters: 'girl', 'boy': 소녀와 소년 캐릭터의 위치와 크기를 나타내는 Rect 객체이다. 
+    1. Parameters : 'girl', 'boy': 소녀와 소년 캐릭터의 위치와 크기를 나타내는 Rect 객체이다. 
     'girl_snowball', 'boy_snowball': 소녀와 소년이 던진 눈덩이 리스트이다. 
     'penguins': 현재 화면에 존재하는 펭귄 리스트이다. 
     'girl_hp', 'boy_hp': 소녀와 소년의 HP값이다.
-    2. Def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp): 배경, 캐릭터, 눈덩이, 펭귄 및 HP를 화면에 그린다.
+    2. Def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp) : 배경, 캐릭터, 눈덩이, 펭귄 및 HP를 화면에 그린다.
 - boy_handle_movement
-    1. Parameters: 'keys_pressed': 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
+    1. Parameters: 'keys_pressed' : 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
     'boy': 소년 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
-    2. Def boy_handle_movement(keys_pressed, boy): 눌려진 키에 따라 소년 캐릭터를 이동시킨다.
+    2. Def boy_handle_movement(keys_pressed, boy) : 눌려진 키에 따라 소년 캐릭터를 이동시킨다.
 - girl_handle_movement
-    1. Parameters: 'keys_pressed': 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
+    1. Parameters: 'keys_pressed' : 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
     'girl': 소녀 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
-    2. Def girl_handle_movement(keys_pressed, girl): 눌려진 키에 따라 소녀 캐릭터를 이동시킨다.
+    2. Def girl_handle_movement(keys_pressed, girl) : 눌려진 키에 따라 소녀 캐릭터를 이동시킨다.
 - handle_snowball
-    1. Parameters: 'boy_snowball', 'girl_snowball': 소년과 소녀가 던진 눈덩이 리스트이다.
+    1. Parameters: 'boy_snowball', 'girl_snowball' : 소년과 소녀가 던진 눈덩이 리스트이다.
     'boy', 'girl': 소년과 소녀 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
     'penguins': 현재 화면에 존재하는 펭귄 리스트이다.
-    2. Def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins): 눈덩이가 화면 밖으로 나가거나, 상대방 캐릭터 또는 펭귄과 충돌하는 경우를 처리한다.
+    2. Def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins) : 눈덩이가 화면 밖으로 나가거나, 상대방 캐릭터 또는 펭귄과 충돌하는 경우를 처리한다.
 - draw_winner
-    1. Parameters: 'text': 승리 메시지를 나타내는 문자열이다.
-    2. Def draw_winner(text): 게임이 끝났을 때 승자를 화면에 표시한다.
+    1. Parameters: 'text' : 승리 메시지를 나타내는 문자열이다.
+    2. Def draw_winner(text) : 게임이 끝났을 때 승자를 화면에 표시한다.
 - main
-    1. Description: 게임의 메인 함수이다.
-    2. Def main(): 게임 초기 설정을 하고, 메인 루프를 실행하여 사용자 입력과 게임 상태를 업데이트하고 화면을 새로 그린다.
+    1. Description : 게임의 메인 함수이다.
+    2. Def main() : 게임 초기 설정을 하고, 메인 루프를 실행하여 사용자 입력과 게임 상태를 업데이트하고 화면을 새로 그린다.
+
+## docker_main.py
+- Description : docker에서 audio가 작동하지 않아서 audio 관련 코드를 주석처리한 코드이다.
