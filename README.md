@@ -16,14 +16,20 @@
 
 ## 실행 방법
 ### MacOS
-1. github link를 clone한다.
+1. pygame을 설치한다.
 ```
-git clone https://github.com/parkjiung123/project1.git
+pip3 install pygame
 ```
-2. 해당 경로로 들어가 main.py를 실행한다.
+2. main.py를 실행하면 게임 차잉 뜨면서 실행된다.
 ```
 python3 main.py
 ```
+
+### Linux
+1. Docker를 설치한다.
+2. Dockerfile을 build한다.
+```
+
 
 # 실행 예시
 ![화면 기록 2024-06-01 오후 9 40 54](https://github.com/parkjiung123/project1/assets/72504995/223da201-b4a2-4520-a885-6dd65144508b)
