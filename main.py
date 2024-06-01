@@ -1,5 +1,7 @@
 import pygame
 import os
+import random
+
 pygame.font.init()
 pygame.mixer.init()
 
@@ -26,7 +28,7 @@ SPEED = 5
 SNOWBALL_SPEED = 7
 MAX_SNOWBALL = 2
 CHARACTER_WIDTH = 60
-CHARACTER_HEIGHT = 45
+CHARACTER_HEIGHT = 50
 
 BOY_HIT = pygame.USEREVENT + 1
 GIRL_HIT = pygame.USEREVENT + 2
@@ -42,27 +44,47 @@ GIRL = pygame.transform.scale(
 
 BACKGROUND=pygame.transform.scale(pygame.image.load(os.path.join('Source','Background.jpg')),(WIDTH,HEIGHT))
 
-def draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp):
-    WIN.blit(BACKGROUND,(0,0))
-    pygame.draw.rect(WIN,BLACK,BORDER)
+SNOWBALL_IMAGE = pygame.image.load(os.path.join('Source', 'Snowball.png'))
+SNOWBALL = pygame.transform.scale(SNOWBALL_IMAGE, (20, 20)) 
 
-    girl_hp_text=HP_FONT.render("HP: " + str(girl_hp),1,BLACK)
-    boy_hp_text=HP_FONT.render("HP: "+ str(boy_hp),1,BLACK)
-    WIN.blit(girl_hp_text,(WIDTH-girl_hp_text.get_width()-10,10))
-    WIN.blit(boy_hp_text,(10,10))
+PENGUIN_IMAGE = pygame.image.load(os.path.join('Source','Penguin.png'))
+PENGUIN = pygame.transform.scale(PENGUIN_IMAGE,(30,30))
 
-    WIN.blit(BOY,(boy.x,boy.y))
-    WIN.blit(GIRL,(girl.x,girl.y))
+class Penguin:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.width = 30
+        self.height = 30
+
+    def draw(self):
+        WIN.blit(PENGUIN, (self.x, self.y))
+        self.y += 1
+
+def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp):
+    WIN.blit(BACKGROUND, (0, 0))
+    pygame.draw.rect(WIN, BLACK, BORDER)
+
+    girl_hp_text = HP_FONT.render("HP: " + str(girl_hp), 1, BLACK)
+    boy_hp_text = HP_FONT.render("HP: " + str(boy_hp), 1, BLACK)
+    WIN.blit(girl_hp_text, (WIDTH - girl_hp_text.get_width() - 10, 10))
+    WIN.blit(boy_hp_text, (10, 10))
+
+    WIN.blit(BOY, (boy.x, boy.y))
+    WIN.blit(GIRL, (girl.x, girl.y))
 
     for snowball in girl_snowball:
-        pygame.draw.rect(WIN,RED, snowball)
+        WIN.blit(SNOWBALL, (snowball.x, snowball.y))
 
     for snowball in boy_snowball:
-        pygame.draw.rect(WIN, YELLOW,snowball)
+        WIN.blit(SNOWBALL, (snowball.x, snowball.y))
+
+    for penguin in penguins:
+        penguin.draw()
 
     pygame.display.update()
 
-def boy_handle_movement(keys_pressed,boy):
+def boy_handle_movement(keys_pressed, boy):
     if keys_pressed[pygame.K_a] and boy.x - SPEED > 0:
         boy.x -= SPEED
     if keys_pressed[pygame.K_d] and boy.x + SPEED + boy.width < BORDER.x:
@@ -72,7 +94,7 @@ def boy_handle_movement(keys_pressed,boy):
     if keys_pressed[pygame.K_s] and boy.y + SPEED + boy.height < HEIGHT - 15:
         boy.y += SPEED
 
-def girl_handle_movement(keys_pressed,girl):
+def girl_handle_movement(keys_pressed, girl):
     if keys_pressed[pygame.K_LEFT] and girl.x - SPEED > BORDER.x + BORDER.width:
         girl.x -= SPEED
     if keys_pressed[pygame.K_RIGHT] and girl.x + SPEED + girl.width < WIDTH:
@@ -82,7 +104,7 @@ def girl_handle_movement(keys_pressed,girl):
     if keys_pressed[pygame.K_DOWN] and girl.y + SPEED + girl.height < HEIGHT - 15:
         girl.y += SPEED
 
-def handle_snowball(boy_snowball,girl_snowball,boy,girl):
+def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
     for snowball in boy_snowball:
         snowball.x += SNOWBALL_SPEED
         if girl.colliderect(snowball):
@@ -96,21 +118,32 @@ def handle_snowball(boy_snowball,girl_snowball,boy,girl):
         if boy.colliderect(snowball):
             pygame.event.post(pygame.event.Event(BOY_HIT))
             girl_snowball.remove(snowball)
-        elif snowball.x <0:
+        elif snowball.x < 0:
             girl_snowball.remove(snowball)
 
+    for penguin in penguins:
+        for snowball in boy_snowball + girl_snowball:
+            if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
+                penguins.remove(penguin)
+                if snowball in boy_snowball:
+                    boy_snowball.remove(snowball)
+                if snowball in girl_snowball:
+                    girl_snowball.remove(snowball)
+                HIT_SNOW_BALL_SOUND.play()
+
 def draw_winner(text):
-    draw_text =WINNER_FONT.render(text,1,BLACK)
-    WIN.blit(draw_text,(WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
+    draw_text = WINNER_FONT.render(text, 1, BLACK)
+    WIN.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2, HEIGHT / 2 - draw_text.get_height() / 2))
     pygame.display.update()
     pygame.time.delay(5000)
 
 def main():
-    girl = pygame.Rect(700, 300, CHARACTER_WIDTH,CHARACTER_HEIGHT)
-    boy = pygame.Rect(100,300, CHARACTER_WIDTH,CHARACTER_HEIGHT)
+    girl = pygame.Rect(700, 300, CHARACTER_WIDTH, CHARACTER_HEIGHT)
+    boy = pygame.Rect(100, 300, CHARACTER_WIDTH, CHARACTER_HEIGHT)
 
     girl_snowball = []
     boy_snowball = []
+    penguins = [Penguin(random.randint(0, WIDTH - 30), 0) for _ in range(5)]
 
     girl_hp = 10
     boy_hp = 10
@@ -127,13 +160,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_v and len(boy_snowball) < MAX_SNOWBALL:
                     snowball = pygame.Rect(
-                            boy.x + boy.width, boy.y + boy.height//2 - 2, 10, 5)
+                        boy.x + boy.width, boy.y + boy.height // 2 - 2, 10, 5)
                     boy_snowball.append(snowball)
                     THROW_SNOW_BALL_SOUND.play()
-                
+
                 if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
                     snowball = pygame.Rect(
-                            girl.x, girl.y + girl.height//2 - 2, 10, 5)
+                        girl.x, girl.y + girl.height // 2 - 2, 10, 5)
                     girl_snowball.append(snowball)
                     THROW_SNOW_BALL_SOUND.play()
 
@@ -142,28 +175,29 @@ def main():
                 HIT_SNOW_BALL_SOUND.play()
 
             if event.type == BOY_HIT:
-                boy_hp -=1
+                boy_hp -= 1
                 HIT_SNOW_BALL_SOUND.play()
 
-        winner_text=""
-        if girl_hp <=0:
-            winner_text="Boy Wins!"
+        winner_text = ""
+        if girl_hp <= 0:
+            winner_text = "Boy Wins!"
 
-        if boy_hp <=0:
-            winner_text="Girl Wins!"
+        if boy_hp <= 0:
+            winner_text = "Girl Wins!"
 
-        if winner_text !="":
+        if winner_text != "":
             draw_winner(winner_text)
             break
 
         keys_pressed = pygame.key.get_pressed()
-        boy_handle_movement(keys_pressed,boy)
-        girl_handle_movement(keys_pressed,girl)
+        boy_handle_movement(keys_pressed, boy)
+        girl_handle_movement(keys_pressed, girl)
 
-        handle_snowball(boy_snowball,girl_snowball,boy,girl)
-        draw_display(girl,boy,girl_snowball,boy_snowball,girl_hp,boy_hp)
+        handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins)
+        draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp)
 
-    main()
+        if random.randint(0, 120) == 0:
+            penguins.append(Penguin(random.randint(0, WIDTH - 30), 0))
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     main()
