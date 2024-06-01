@@ -146,6 +146,10 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
         if snowball in girl_snowball:
             girl_snowball.remove(snowball)
 
+    for penguin in penguins:
+        if penguin.y > HEIGHT:
+            penguins.remove(penguin)
+
 
 def draw_winner(text):
     draw_text = WINNER_FONT.render(text, 1, BLACK)
@@ -213,7 +217,7 @@ def main():
         handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins)
         draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp)
 
-        if random.randint(0, 240) == 0:
+        if random.randint(0, 200) == 0: 
             penguins.append(Penguin(random.randint(0, WIDTH - 30), 0))
 
 if __name__ == "__main__":
