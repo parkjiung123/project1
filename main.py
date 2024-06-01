@@ -6,7 +6,7 @@ pygame.mixer.init()
 WIDTH= 900
 HEIGHT= 500
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
-pygame.display.set_caption("First Game!")
+pygame.display.set_caption("Snowball Game!")
 
 WHITE = (255,255,255)
 BLACK=(0,0,0)
@@ -25,8 +25,8 @@ FPS = 60
 SPEED = 5
 SNOWBALL_SPEED = 7
 MAX_SNOWBALL = 2
-CHARACTER_WIDTH = 55
-CHARACTER_HEIGHT = 40
+CHARACTER_WIDTH = 60
+CHARACTER_HEIGHT = 45
 
 BOY_HIT = pygame.USEREVENT + 1
 GIRL_HIT = pygame.USEREVENT + 2
