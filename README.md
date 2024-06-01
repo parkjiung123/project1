@@ -29,10 +29,57 @@ python3 main.py
 1. Docker를 설치한다.
 2. Dockerfile을 build한다.
 ```
-
+docker build -t snow-ball:1 .
+```
+3. docker container를 실행하면 게임이 실행된다.
+```
+docker run -it snow-ball:1
+```
 
 # 실행 예시
 ![화면 기록 2024-06-01 오후 9 40 54](https://github.com/parkjiung123/project1/assets/72504995/223da201-b4a2-4520-a885-6dd65144508b)
 
+# 게임 설명
+게임에서 두 플레이어는 상대에게 떨어지는 펭귄을 피해 서로 눈덩이를 던져 상대방의 HP(체력)을 깎아야 한다. HP가 0이 되면 게임에서 패배한다.
 
+# 게임 방법
+- Boy(왼쪽 플레이어)
+    1. 이동: 'A' (왼쪽), 'D' (오른쪽), 'W' (위), 'S' (아래)
+    2. 눈덩이 던지기: 'V'
+- Girl(오른쪽 플레이어)
+    1. 이동: '←' (왼쪽), '→' (오른쪽), '↑' (위), '↓' (아래)
+    2. 눈덩이 던지기: '/'
 
+# 코드 설명
+## main.py
+### class Penguin
+- Description : 화면 위에서 아래로 떨어지는 펭귄 객체를 나타내는 클래스
+  1. Def __init__(self,x,y) : 펭귄 객체의 초기 위치를 설정한다. 'x', 'y': 펭귄의 초기 위치 좌표이다.
+  2. Def draw(self) : 펭귄을 화면에 그린다. 펭귄의 위치를 업데이트하여 아래로 이동시킨다.
+
+### Function
+- draw_display
+    1. Parameters: 'girl', 'boy': 소녀와 소년 캐릭터의 위치와 크기를 나타내는 Rect 객체이다. 
+    'girl_snowball', 'boy_snowball': 소녀와 소년이 던진 눈덩이 리스트이다. 
+    'penguins': 현재 화면에 존재하는 펭귄 리스트이다. 
+    'girl_hp', 'boy_hp': 소녀와 소년의 HP값이다.
+    2. Def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp): 배경, 캐릭터, 눈덩이, 펭귄 및 HP를 화면에 그린다.
+- boy_handle_movement
+    1. Parameters: 'keys_pressed': 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
+    'boy': 소년 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
+    2. Def boy_handle_movement(keys_pressed, boy): 눌려진 키에 따라 소년 캐릭터를 이동시킨다.
+- girl_handle_movement
+    1. Parameters: 'keys_pressed': 현재 눌려진 키의 상태를 나타내는 Pygame 키 배열이다.
+    'girl': 소녀 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
+    2. Def girl_handle_movement(keys_pressed, girl): 눌려진 키에 따라 소녀 캐릭터를 이동시킨다.
+- handle_snowball
+    1. Parameters: 'boy_snowball', 'girl_snowball': 소년과 소녀가 던진 눈덩이 리스트이다.
+    'boy', 'girl': 소년과 소녀 캐릭터의 위치와 크기를 나타내는 Rect 객체이다.
+    'penguins': 현재 화면에 존재하는 펭귄 리스트이다.
+    2. Def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins): 눈덩이가 화면 밖으로 나가거나, 상대방 캐릭터 또는 펭귄과 충돌하는 경우를 처리한다.
+- draw_winner
+    1. Parameters: 'text': 승리 메시지를 나타내는 문자열이다.
+    2. Def draw_winner(text): 게임이 끝났을 때 승자를 화면에 표시한다.
+- main
+    1. Description: 게임의 메인 함수이다.
+    2. Def main(): 게임 초기 설정을 하고, 메인 루프를 실행하여 사용자 입력과 게임 상태를 업데이트하고 화면을 새로 그린다.
