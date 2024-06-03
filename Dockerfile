@@ -14,6 +14,6 @@ RUN git clone https://github.com/parkjiung123/project1.git project1
 WORKDIR /usr/src/app/project1
 
 
-RUN pip install pygame
+RUN pip3 install pygame
 
 CMD ["python3", "docker_main.py"]
