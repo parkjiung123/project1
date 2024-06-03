@@ -8,11 +8,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /usr/src/app
 
-RUN git clone https://github.com/parkjiung123/project1.git project1
-
-
-WORKDIR /usr/src/app/project1
-
+COPY . .
 
 RUN pip3 install pygame
 
