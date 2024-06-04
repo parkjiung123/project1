@@ -15,25 +15,14 @@
 |MacOS  | :o:  |
 
 ## 실행 방법
-### MacOS
+### MacOS, Linux
 1. pygame을 설치한다.
 ```
 pip3 install pygame
 ```
-2. main.py를 실행하면 게임 차잉 뜨면서 실행된다.
+2. main.py를 실행하면 게임 창이 뜨면서 실행된다.
 ```
 python3 main.py
-```
-
-### Linux
-1. Docker를 설치한다.
-2. Dockerfile을 build한다.
-```
-docker build -t snow-ball:1 .
-```
-3. docker container를 실행하면 게임이 실행된다.
-```
-docker run -it snow-ball:1
 ```
 
 # 실행 예시
@@ -83,6 +72,3 @@ docker run -it snow-ball:1
 - main
     1. Description : 게임의 메인 함수이다.
     2. Def main() : 게임 초기 설정을 하고, 메인 루프를 실행하여 사용자 입력과 게임 상태를 업데이트하고 화면을 새로 그린다.
-
-## docker_main.py
-- Description : docker에서 audio가 작동하지 않아서 audio 관련 코드를 주석처리한 코드이다.
