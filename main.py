@@ -30,7 +30,8 @@ GAMEOVER_FONT = pygame.font.SysFont('comicsans',100)
 FPS = 60
 SPEED = 5
 SNOWBALL_SPEED = 7
-MAX_SNOWBALL = 2
+############### PHASE 2 ###############
+MAX_SNOWBALL = 1
 CHARACTER_WIDTH = 60
 CHARACTER_HEIGHT = 50
 
@@ -58,6 +59,25 @@ SNOWBALL = pygame.transform.scale(SNOWBALL_IMAGE, (20, 20))
 PENGUIN_IMAGE = pygame.image.load(os.path.join('Source', 'Penguin.png'))
 PENGUIN = pygame.transform.scale(PENGUIN_IMAGE, (55, 45))
 
+#######################################
+############### PHASE 2 ###############
+#######################################
+
+#스노우 볼 스킬(갈라지기) 구현 위한 스노우볼 클래스 선언
+class Snowball:
+    def __init__(self, x, y, x_speed, y_speed):
+        self.rect = pygame.Rect(x, y, 10, 5)
+        self.x_speed = x_speed
+        self.y_speed = y_speed
+
+    def move(self):
+        self.rect.x += self.x_speed
+        self.rect.y += self.y_speed
+        
+#######################################
+############### PHASE 2 ###############
+#######################################
+
 
 class Penguin:
     def __init__(self, x, y):
@@ -83,11 +103,12 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_
     WIN.blit(BOY, (boy.x, boy.y))
     WIN.blit(GIRL, (girl.x, girl.y))
 
+    ############### PHASE 2 ###############   snowball 클래스 변화에 따른 수정
     for snowball in girl_snowball:
-        WIN.blit(SNOWBALL, (snowball.x, snowball.y))
+        WIN.blit(SNOWBALL, (snowball.rect.x, snowball.rect.y))
 
     for snowball in boy_snowball:
-        WIN.blit(SNOWBALL, (snowball.x, snowball.y))
+        WIN.blit(SNOWBALL, (snowball.rect.x, snowball.rect.y))
 
     for penguin in penguins:
         penguin.draw()
@@ -119,19 +140,21 @@ def girl_handle_movement(keys_pressed, girl):
 
 def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
     for snowball in boy_snowball:
-        snowball.x += SNOWBALL_SPEED
+        ############### PHASE 2 ############### snowball 클래스 변화에 따른 이동 방법 수정
+        snowball.move()
         if girl.colliderect(snowball):
             pygame.event.post(pygame.event.Event(GIRL_HIT))
             boy_snowball.remove(snowball)
-        elif snowball.x > WIDTH:
+        elif snowball.rect.x > WIDTH:       ############### PHASE 2 ###############   snowball 클래스 변화에 따른 수정
             boy_snowball.remove(snowball)
 
     for snowball in girl_snowball:
-        snowball.x -= SNOWBALL_SPEED
+        ############### PHASE 2 ############### snowball 클래스 변화에 따른 이동 방법 수정
+        snowball.move()
         if boy.colliderect(snowball):
             pygame.event.post(pygame.event.Event(BOY_HIT))
             girl_snowball.remove(snowball)
-        elif snowball.x < 0:
+        elif snowball.rect.x < 0:           ############### PHASE 2 ###############   snowball 클래스 변화에 따른 수정
             girl_snowball.remove(snowball)
 
     penguins_to_remove = []
@@ -139,7 +162,7 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
 
     for penguin in penguins:
         for snowball in boy_snowball + girl_snowball:
-            if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
+            if penguin.x < snowball.rect.x < penguin.x + penguin.width and penguin.y < snowball.rect.y < penguin.y + penguin.height:    ############### PHASE 2 ############### snowball 클래스 변화에 따른 수정
                 penguins_to_remove.append(penguin)
                 snowballs_to_remove.append(snowball)
                 HIT_SNOW_BALL_SOUND.play()
@@ -192,16 +215,29 @@ def runGame():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_v and len(boy_snowball) < MAX_SNOWBALL:
-                    snowball = pygame.Rect(
-                        boy.x + boy.width, boy.y + boy.height // 2 - 2, 10, 5)
+                    ############### PHASE 2 ###############  snowball 객체 생성 방법 변화에 따른 코드 변화
+                    snowball = Snowball(boy.x + boy.width, boy.y + boy.height // 2 - 2, SNOWBALL_SPEED, 0)
+                    boy_snowball.append(snowball)
+                    THROW_SNOW_BALL_SOUND.play()
+                ############### PHASE 2 ###############       만약 눈덩이가 필드에 하나 있을 때 한번더 공격키를 누르면 새로운 눈덩이를 생성하고 각 눈덩이의 방향 수정
+                elif event.key == pygame.K_v and len(boy_snowball) == MAX_SNOWBALL:
+                    snowball = Snowball(boy_snowball[0].rect.x, boy_snowball[0].rect.y, SNOWBALL_SPEED, SNOWBALL_SPEED/4)
+                    boy_snowball[0].y_speed=-SNOWBALL_SPEED/4
                     boy_snowball.append(snowball)
                     THROW_SNOW_BALL_SOUND.play()
 
                 if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
-                    snowball = pygame.Rect(
-                        girl.x, girl.y + girl.height // 2 - 2, 10, 5)
+                    ############### PHASE 2 ###############     snowball 객체 생성 방법 변화에 따른 코드 변화
+                    snowball = Snowball(girl.x , girl.y + girl.height // 2 - 2, -SNOWBALL_SPEED, 0)
                     girl_snowball.append(snowball)
                     THROW_SNOW_BALL_SOUND.play()
+                ############### PHASE 2 ###############       만약 눈덩이가 필드에 하나 있을 때 한번더 공격키를 누르면 새로운 눈덩이를 생성하고 각 눈덩이의 방향 수정
+                elif event.key == pygame.K_SLASH and len(girl_snowball) == MAX_SNOWBALL:
+                    snowball = Snowball(girl_snowball[0].rect.x, girl_snowball[0].rect.y, -SNOWBALL_SPEED, SNOWBALL_SPEED/4)
+                    girl_snowball[0].y_speed=-SNOWBALL_SPEED/4
+                    girl_snowball.append(snowball)
+                    THROW_SNOW_BALL_SOUND.play()
+
 
             if event.type == GIRL_HIT:
                 girl_hp -= 1
