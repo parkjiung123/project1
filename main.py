@@ -30,7 +30,7 @@ GAMEOVER_FONT = pygame.font.SysFont('comicsans',100)
 FPS = 60
 SPEED = 5
 SNOWBALL_SPEED = 7
-############### PHASE 2 ###############
+############### PHASE 2 ############### 눈덩이 최대 갯수 수정
 MAX_SNOWBALL = 1
 CHARACTER_WIDTH = 60
 CHARACTER_HEIGHT = 50
@@ -62,8 +62,8 @@ PENGUIN = pygame.transform.scale(PENGUIN_IMAGE, (55, 45))
 #######################################
 ############### PHASE 2 ###############
 #######################################
-
 #스노우 볼 스킬(갈라지기) 구현 위한 스노우볼 클래스 선언
+
 class Snowball:
     def __init__(self, x, y, x_speed, y_speed):
         self.rect = pygame.Rect(x, y, 10, 5)
@@ -90,7 +90,7 @@ class Penguin:
         WIN.blit(PENGUIN, (self.x, self.y))
         self.y += 1
 
-############### PHASE 2 ###############
+############### PHASE 2 ############### 객체 추가에 따른 매개변수 추가
 def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp, girl_skill, boy_skill, boy_clones, girl_clones):
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
@@ -103,6 +103,7 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_
     #######################################
     ############### PHASE 2 ###############
     #######################################
+    # HP 관련 UI 표시
     girl_skill_text = HP_FONT.render("Skill: " + str(int(girl_skill)) + "%", 1, BLACK)
     boy_skill_text = HP_FONT.render("Skill: " + str(int(boy_skill)) + "%", 1, BLACK)
     WIN.blit(girl_skill_text, (WIDTH - girl_skill_text.get_width() - 10, 50))
@@ -124,10 +125,11 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_
     for penguin in penguins:
         penguin.draw()
 
+
     #######################################
     ############### PHASE 2 ###############
     #######################################
-        
+    #클론 object들 추가
     for clone in boy_clones:
         WIN.blit(BOY, (clone.x, clone.y))
 
@@ -151,7 +153,7 @@ def boy_handle_movement(keys_pressed, boy, clones):
     if keys_pressed[pygame.K_s] and boy.y + SPEED + boy.height < HEIGHT - 15:
         boy.y += SPEED
 
-    ############### PHASE 2 ###############
+    ############### PHASE 2 ###############     클론의 위치 수정
     for clone in clones:
         clone.x = boy.x + clone.dx
         clone.y = boy.y + clone.dy
@@ -167,7 +169,7 @@ def girl_handle_movement(keys_pressed, girl, clones):
     if keys_pressed[pygame.K_DOWN] and girl.y + SPEED + girl.height < HEIGHT - 15:
         girl.y += SPEED
 
-    ############### PHASE 2 ###############
+    ############### PHASE 2 ###############     클론의 위치 수정
     for clone in clones:
         clone.x = girl.x + clone.dx
         clone.y = girl.y + clone.dy
@@ -180,7 +182,7 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, boy_clones
         if girl.colliderect(snowball):
             pygame.event.post(pygame.event.Event(GIRL_HIT))
             boy_snowball.remove(snowball)
-        elif snowball.rect.x > WIDTH:       ############### PHASE 2 ###############   snowball 클래스 변화에 따른 수정
+        elif snowball.rect.x > WIDTH:
             boy_snowball.remove(snowball)
 
     for snowball in girl_snowball:
@@ -189,10 +191,15 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, boy_clones
         if boy.colliderect(snowball):
             pygame.event.post(pygame.event.Event(BOY_HIT))
             girl_snowball.remove(snowball)
-        elif snowball.rect.x < 0:           ############### PHASE 2 ###############   snowball 클래스 변화에 따른 수정
+        elif snowball.rect.x < 0:
             girl_snowball.remove(snowball)
 
+
+
+    #######################################
     ############### PHASE 2 ###############
+    #######################################
+    #클론이 맞았을 경우 처리
     for clone in boy_clones:
         for snowball in girl_snowball:
             if clone.colliderect(snowball.rect):
@@ -204,7 +211,10 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, boy_clones
             if clone.colliderect(snowball.rect):
                 pygame.event.post(pygame.event.Event(GIRL_HIT))
                 boy_snowball.remove(snowball)
+                
+    #######################################
     ############### PHASE 2 ###############
+    #######################################
 
 
 
@@ -213,7 +223,7 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, boy_clones
 
     for penguin in penguins:
         for snowball in boy_snowball + girl_snowball:
-            if penguin.x < snowball.rect.x < penguin.x + penguin.width and penguin.y < snowball.rect.y < penguin.y + penguin.height:    ############### PHASE 2 ############### snowball 클래스 변화에 따른 수정
+            if penguin.x < snowball.rect.x < penguin.x + penguin.width and penguin.y < snowball.rect.y < penguin.y + penguin.height:
                 penguins_to_remove.append(penguin)
                 snowballs_to_remove.append(snowball)
                 HIT_SNOW_BALL_SOUND.play()
@@ -242,6 +252,8 @@ def draw_winner(text):
 #######################################
 ############### PHASE 2 ###############
 #######################################
+#clone과 관련된 클래스 정의
+    
 class Clone:
     def __init__(self, x, y, dx, dy):
         self.x = x
@@ -251,6 +263,7 @@ class Clone:
 
     def colliderect(self, rect):
         return pygame.Rect(self.x, self.y, CHARACTER_WIDTH, CHARACTER_HEIGHT).colliderect(rect)
+    
 #######################################
 ############### PHASE 2 ###############
 #######################################
@@ -271,13 +284,19 @@ def runGame():
     girl_hp = 10
     boy_hp = 10
 
+    #######################################
     ############### PHASE 2 ###############
+    #######################################
+    #스킬 구현 위한 변수 선언
     girl_skill = 0
     boy_skill = 0
     girl_skill_timer = 0
     boy_skill_timer = 0
     girl_clones = []
     boy_clones = []
+    #######################################
+    ############### PHASE 2 ###############
+    #######################################
 
     clock = pygame.time.Clock()
     run = True
@@ -286,7 +305,6 @@ def runGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                ############### PHASE 2 ###############
                 terminate()
 
             if event.type == pygame.KEYDOWN:
@@ -295,19 +313,30 @@ def runGame():
                     snowball = Snowball(boy.x + boy.width, boy.y + boy.height // 2 - 2, SNOWBALL_SPEED, 0)
                     boy_snowball.append(snowball)
                     
+
+                    #######################################
                     ############### PHASE 2 ###############
+                    #######################################
+                    #클론이 존재할 시 클론에 대한 스노우볼 생성 및 추가
                     if boy_clones != []:
                         for clones in boy_clones:
                             snowballs=Snowball(clones.x + boy.width, clones.y+boy.height//2-2,SNOWBALL_SPEED,0)
                             boy_snowball.append(snowballs)
-
-                    THROW_SNOW_BALL_SOUND.play()
+                    #######################################
+                    ############### PHASE 2 ###############
+                    #######################################
+                            
+                    THROW_SNOW_BALL_SOUND.play()              
                 ############### PHASE 2 ###############       만약 눈덩이가 필드에 하나 있을 때 한번더 공격키를 누르면 새로운 눈덩이를 생성하고 각 눈덩이의 방향 수정
                 elif event.key == pygame.K_v and (len(boy_snowball) == MAX_SNOWBALL or len(boy_snowball)==3) :
                     snowball = Snowball(boy_snowball[0].rect.x, boy_snowball[0].rect.y, SNOWBALL_SPEED, SNOWBALL_SPEED/4)
                     boy_snowball[0].y_speed=-SNOWBALL_SPEED/4
                     boy_snowball.append(snowball)
+            
+                    #######################################
                     ############### PHASE 2 ###############
+                    #######################################
+                    #클론이 존재할 때 눈덩이 방향 수정 추가 코드
                     if len(boy_snowball)==4 :
                         snowball = Snowball(boy_snowball[1].rect.x, boy_snowball[1].rect.y, SNOWBALL_SPEED, SNOWBALL_SPEED / 4)
                         boy_snowball[1].y_speed = -SNOWBALL_SPEED / 4
@@ -315,18 +344,27 @@ def runGame():
                         snowball = Snowball(boy_snowball[2].rect.x, boy_snowball[2].rect.y, SNOWBALL_SPEED, SNOWBALL_SPEED / 4)
                         boy_snowball[2].y_speed = -SNOWBALL_SPEED / 4
                         boy_snowball.append(snowball)
+                    #######################################
                     ############### PHASE 2 ###############
-                        
+                    #######################################
                     THROW_SNOW_BALL_SOUND.play()
 
                 if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
                     ############### PHASE 2 ###############     snowball 객체 생성 방법 변화에 따른 코드 변화
                     snowball = Snowball(girl.x , girl.y + girl.height // 2 - 2, -SNOWBALL_SPEED, 0)
                     girl_snowball.append(snowball)
+
+                    #######################################
+                    ############### PHASE 2 ###############
+                    #######################################
+                    #클론이 존재할 시 클론에 대한 스노우볼 생성 및 추가
                     if girl_clones != []:
                         for clones in girl_clones:
                             snowballs=Snowball(clones.x + girl.width, clones.y+girl.height//2-2,-SNOWBALL_SPEED,0)
                             girl_snowball.append(snowballs)
+                    #######################################
+                    ############### PHASE 2 ###############
+                    #######################################
                             
                     THROW_SNOW_BALL_SOUND.play()
                 ############### PHASE 2 ###############       만약 눈덩이가 필드에 하나 있을 때 한번더 공격키를 누르면 새로운 눈덩이를 생성하고 각 눈덩이의 방향 수정
@@ -334,7 +372,11 @@ def runGame():
                     snowball = Snowball(girl_snowball[0].rect.x, girl_snowball[0].rect.y, -SNOWBALL_SPEED, SNOWBALL_SPEED/4)
                     girl_snowball[0].y_speed=-SNOWBALL_SPEED/4
                     girl_snowball.append(snowball)
+                    
+                    #######################################
                     ############### PHASE 2 ###############
+                    #######################################
+                    #클론이 존재할 때 눈덩이 방향 수정 추가 코드
                     if len(girl_snowball)==4 :
                         snowball = Snowball(girl_snowball[1].rect.x, girl_snowball[1].rect.y, -SNOWBALL_SPEED, SNOWBALL_SPEED / 4)
                         girl_snowball[1].y_speed = -SNOWBALL_SPEED / 4
@@ -342,10 +384,15 @@ def runGame():
                         snowball = Snowball(girl_snowball[2].rect.x, girl_snowball[2].rect.y, -SNOWBALL_SPEED, SNOWBALL_SPEED / 4)
                         girl_snowball[2].y_speed = -SNOWBALL_SPEED / 4
                         girl_snowball.append(snowball)
+                    #######################################
+                    ############### PHASE 2 ###############
+                    #######################################
                     THROW_SNOW_BALL_SOUND.play()
 
-
+                #######################################
                 ############### PHASE 2 ###############
+                #######################################
+                #스킬 게이지가 다찼을 때 유저가 스킬 키를 눌렀을 시 스킬 실행(클론 생성)
                 if event.key == pygame.K_c and boy_skill == 100:
                     boy_clones = [Clone(boy.x - 50, boy.y - 50, -50, -50), Clone(boy.x - 50, boy.y + 50, -50, 50)]
                     boy_skill_timer = pygame.time.get_ticks()
@@ -354,7 +401,9 @@ def runGame():
                     girl_clones = [Clone(girl.x + 50, girl.y - 50, 50, -50), Clone(girl.x + 50, girl.y + 50, 50, 50)]
                     girl_skill_timer = pygame.time.get_ticks()
                     girl_skill = 0
+                #######################################
                 ############### PHASE 2 ###############
+                #######################################
 
 
 
@@ -367,7 +416,10 @@ def runGame():
                 HIT_SNOW_BALL_SOUND.play()
 
 
+        #######################################
         ############### PHASE 2 ###############
+        #######################################
+        #스킬 관련 수치 초마다 업데이트
         if pygame.time.get_ticks() - boy_skill_timer > 10000:
             boy_clones = []
 
@@ -383,7 +435,9 @@ def runGame():
             girl_skill += 5 / FPS
             if girl_skill>100:
                 girl_skill = 100
+        #######################################
         ############### PHASE 2 ###############
+        #######################################
             
         winner_text = ""
         if girl_hp <= 0:
@@ -393,7 +447,6 @@ def runGame():
             winner_text = "Girl Wins!"
 
         if winner_text != "":
-            ############### PHASE 2 ###############
             run = False
 
         keys_pressed = pygame.key.get_pressed()
