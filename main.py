@@ -21,6 +21,7 @@ THROW_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Throw_Snowball.mp3')
 HIT_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Hit_Snowball.mp3')
 
 HP_FONT = pygame.font.SysFont('comicsans', 40)
+POINT_FONT = pygame.font.SysFont('comicsans', 30)
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 FPS = 60
@@ -50,6 +51,9 @@ SNOWBALL = pygame.transform.scale(SNOWBALL_IMAGE, (20, 20))
 PENGUIN_IMAGE = pygame.image.load(os.path.join('Source', 'Penguin.png'))
 PENGUIN = pygame.transform.scale(PENGUIN_IMAGE, (55, 45))
 
+POLARBEAR_IMAGE = pygame.image.load(os.path.join('Source', 'polarbear.png'))
+POLARBEARS = pygame.transform.scale(POLARBEAR_IMAGE, (100, 100))
+
 
 class Penguin:
     def __init__(self, x, y):
@@ -62,8 +66,19 @@ class Penguin:
         WIN.blit(PENGUIN, (self.x, self.y))
         self.y += 1
 
+class Polarbear:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.width = 100
+        self.height = 100
 
-def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp):
+    def draw(self):
+        WIN.blit(POLARBEARS, (self.x, self.y))
+        self.y += 1
+
+
+def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, girl_hp, boy_hp, girl_point, boy_point):
     WIN.blit(BACKGROUND, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
 
@@ -71,6 +86,11 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_
     boy_hp_text = HP_FONT.render("HP: " + str(boy_hp), 1, BLACK)
     WIN.blit(girl_hp_text, (WIDTH - girl_hp_text.get_width() - 10, 10))
     WIN.blit(boy_hp_text, (10, 10))
+
+    girl_point_text = POINT_FONT.render("Points: " + str(girl_point), 1, BLACK)
+    boy_point_text = POINT_FONT.render("Points: " + str(boy_point), 1, BLACK)
+    WIN.blit(girl_point_text, (WIDTH - girl_hp_text.get_width() - girl_point_text.get_width() - 30, 20))
+    WIN.blit(boy_point_text, (30 + boy_hp_text.get_width(), 20))
 
     WIN.blit(BOY, (boy.x, boy.y))
     WIN.blit(GIRL, (girl.x, girl.y))
@@ -83,6 +103,9 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_
 
     for penguin in penguins:
         penguin.draw()
+
+    for polarbear in polarbears:
+        polarbear.draw()
 
     pygame.display.update()
 
@@ -109,7 +132,7 @@ def girl_handle_movement(keys_pressed, girl):
         girl.y += SPEED
 
 
-def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
+def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears):
     for snowball in boy_snowball:
         snowball.x += SNOWBALL_SPEED
         if girl.colliderect(snowball):
@@ -128,17 +151,51 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
 
     penguins_to_remove = []
     snowballs_to_remove = []
+    polarbears_to_remove = []
+
+    girl_point = 0
+    boy_point = 0
 
     for penguin in penguins:
-        for snowball in boy_snowball + girl_snowball:
+        for snowball in boy_snowball:
             if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
                 penguins_to_remove.append(penguin)
                 snowballs_to_remove.append(snowball)
                 HIT_SNOW_BALL_SOUND.play()
+                boy_point += 1
+    
+    for penguin in penguins:
+        for snowball in girl_snowball:
+            if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
+                penguins_to_remove.append(penguin)
+                snowballs_to_remove.append(snowball)
+                HIT_SNOW_BALL_SOUND.play()
+                girl_point += 1
+
+    for polarbear in polarbears:
+        for snowball in boy_snowball:
+            if polarbear.x < snowball.x < polarbear.x + polarbear.width and polarbear.y < snowball.y < polarbear.y + polarbear.height:
+                polarbears_to_remove.append(polarbear)
+                snowballs_to_remove.append(snowball)
+                HIT_SNOW_BALL_SOUND.play()
+                boy_point += 2
+
+    for polarbear in polarbears:
+        for snowball in girl_snowball:
+            if polarbear.x < snowball.x < polarbear.x + polarbear.width and polarbear.y < snowball.y < polarbear.y + polarbear.height:
+                polarbears_to_remove.append(polarbear)
+                snowballs_to_remove.append(snowball)
+                HIT_SNOW_BALL_SOUND.play()
+                girl_point += 2
+
 
     for penguin in penguins_to_remove:
         if penguin in penguins:
             penguins.remove(penguin)
+
+    for polarbear in polarbears_to_remove:
+        if polarbear in polarbears:
+            polarbears.remove(polarbear)
 
     for snowball in snowballs_to_remove:
         if snowball in boy_snowball:
@@ -149,6 +206,12 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins):
     for penguin in penguins:
         if penguin.y > HEIGHT:
             penguins.remove(penguin)
+
+    for polarbear in polarbears:
+        if polarbear.y > HEIGHT:
+            polarbears.remove(polarbear)
+    
+    return girl_point, boy_point
 
 
 def draw_winner(text):
@@ -165,9 +228,13 @@ def main():
     girl_snowball = []
     boy_snowball = []
     penguins = [Penguin(random.randint(0, WIDTH - 30), 0) for _ in range(5)]
+    polarbears = [Polarbear(random.randint(0, WIDTH - 30), 0) for _ in range(5)]
 
     girl_hp = 10
     boy_hp = 10
+
+    girl_point = 0
+    boy_point = 0
 
     clock = pygame.time.Clock()
     run = True
@@ -214,11 +281,17 @@ def main():
         boy_handle_movement(keys_pressed, boy)
         girl_handle_movement(keys_pressed, girl)
 
-        handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins)
-        draw_display(girl, boy, girl_snowball, boy_snowball, penguins, girl_hp, boy_hp)
+        gp, bp = handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears)
+        draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, girl_hp, boy_hp, girl_point, boy_point)
+
+        girl_point += gp
+        boy_point += bp
 
         if random.randint(0, 200) == 0: 
             penguins.append(Penguin(random.randint(0, WIDTH - 30), 0))
+        
+        if random.randint(0, 200) == 0: 
+            polarbears.append(Polarbear(random.randint(0, WIDTH - 30), 0))
 
 if __name__ == "__main__":
     main()
