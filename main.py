@@ -45,6 +45,25 @@ GIRL_IMAGE = pygame.image.load(
 GIRL = pygame.transform.scale(
     GIRL_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
 
+BOY_BUFF = pygame.transform.scale(
+    BOY_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
+GIRL_BUFF = pygame.transform.scale(
+    GIRL_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
+
+width, height = BOY_BUFF.get_size()
+
+for x in range(width):
+    for y in range(height):
+        r, g, b, a = BOY_BUFF.get_at((x, y))
+        BOY_BUFF.set_at((x, y), (r, 0, 0, a))
+
+width, height = GIRL_BUFF.get_size()
+        
+for x in range(width):
+    for y in range(height):
+        r, g, b, a = GIRL_BUFF.get_at((x, y))
+        GIRL_BUFF.set_at((x, y), (r, 0, 0, a))
+
 BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join('Source', 'Background.jpg')), (WIDTH, HEIGHT))
 
 SNOWBALL_IMAGE = pygame.image.load(os.path.join('Source', 'Snowball.png'))
@@ -94,8 +113,15 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, g
     WIN.blit(girl_point_text, (WIDTH - girl_hp_text.get_width() - girl_point_text.get_width() - 30, 20))
     WIN.blit(boy_point_text, (30 + boy_hp_text.get_width(), 20))
 
-    WIN.blit(BOY, (boy.x, boy.y))
-    WIN.blit(GIRL, (girl.x, girl.y))
+    if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
+        WIN.blit(GIRL_BUFF, (girl.x, girl.y))
+    else:
+        WIN.blit(GIRL, (girl.x, girl.y))
+
+    if MAX_BOY_SNOWBALL > MAX_SNOWBALL:
+        WIN.blit(BOY_BUFF, (boy.x, boy.y))
+    else:
+        WIN.blit(BOY, (boy.x, boy.y))
 
     for snowball in girl_snowball:
         WIN.blit(SNOWBALL, (snowball.x, snowball.y))
