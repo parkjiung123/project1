@@ -28,6 +28,8 @@ FPS = 60
 SPEED = 5
 SNOWBALL_SPEED = 7
 MAX_SNOWBALL = 2
+MAX_BOY_SNOWBALL = MAX_SNOWBALL
+MAX_GIRL_SNOWBALL = MAX_SNOWBALL
 CHARACTER_WIDTH = 60
 CHARACTER_HEIGHT = 50
 
@@ -221,6 +223,24 @@ def draw_winner(text):
     pygame.time.delay(5000)
 
 
+def set_boy_buff(boy_point, bp):
+    global MAX_BOY_SNOWBALL, FPS, MAX_SNOWBALL
+    if boy_point > 20:
+        boy_point = 0
+        MAX_BOY_SNOWBALL = FPS * 5
+    if MAX_BOY_SNOWBALL > MAX_SNOWBALL:
+        MAX_BOY_SNOWBALL -= 1
+    return boy_point + bp
+
+def set_girl_buff(girl_point, gp):
+    global MAX_GIRL_SNOWBALL, FPS, MAX_SNOWBALL
+    if girl_point > 20:
+        girl_point = 0
+        MAX_GIRL_SNOWBALL = FPS * 5
+    if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
+        MAX_GIRL_SNOWBALL -= 1
+    return girl_point + gp
+
 def main():
     girl = pygame.Rect(700, 300, CHARACTER_WIDTH, CHARACTER_HEIGHT)
     boy = pygame.Rect(100, 300, CHARACTER_WIDTH, CHARACTER_HEIGHT)
@@ -246,13 +266,13 @@ def main():
                 pygame.quit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_v and len(boy_snowball) < MAX_SNOWBALL:
+                if event.key == pygame.K_v and len(boy_snowball) < MAX_BOY_SNOWBALL:
                     snowball = pygame.Rect(
                         boy.x + boy.width, boy.y + boy.height // 2 - 2, 10, 5)
                     boy_snowball.append(snowball)
                     THROW_SNOW_BALL_SOUND.play()
 
-                if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_SNOWBALL:
+                if event.key == pygame.K_SLASH and len(girl_snowball) < MAX_GIRL_SNOWBALL:
                     snowball = pygame.Rect(
                         girl.x, girl.y + girl.height // 2 - 2, 10, 5)
                     girl_snowball.append(snowball)
@@ -284,8 +304,8 @@ def main():
         gp, bp = handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears)
         draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, girl_hp, boy_hp, girl_point, boy_point)
 
-        girl_point += gp
-        boy_point += bp
+        boy_point = set_boy_buff(boy_point, bp)
+        girl_point = set_girl_buff(girl_point, gp)
 
         if random.randint(0, 200) == 0: 
             penguins.append(Penguin(random.randint(0, WIDTH - 30), 0))
