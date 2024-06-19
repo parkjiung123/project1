@@ -19,6 +19,9 @@ BORDER = pygame.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)
 
 THROW_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Throw_Snowball.mp3')
 HIT_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Hit_Snowball.mp3')
+BUFF_SOUND_EFFECT = pygame.mixer.Sound('Source/buff.mp3')
+BUFF_SOUND_EFFECT.set_volume(1)
+pygame.mixer.music.load('Source/normal.mp3')
 
 HP_FONT = pygame.font.SysFont('comicsans', 40)
 POINT_FONT = pygame.font.SysFont('comicsans', 30)
@@ -189,7 +192,7 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears
             if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
                 penguins_to_remove.append(penguin)
                 snowballs_to_remove.append(snowball)
-                HIT_SNOW_BALL_SOUND.play()
+                # HIT_SNOW_BALL_SOUND.play()
                 boy_point += 1
     
     for penguin in penguins:
@@ -254,6 +257,7 @@ def set_boy_buff(boy_point, bp):
     if boy_point > 20:
         boy_point = 0
         MAX_BOY_SNOWBALL = FPS * 5
+        BUFF_SOUND_EFFECT.play()
     if MAX_BOY_SNOWBALL > MAX_SNOWBALL:
         MAX_BOY_SNOWBALL -= 1
     return boy_point + bp
@@ -263,6 +267,7 @@ def set_girl_buff(girl_point, gp):
     if girl_point > 20:
         girl_point = 0
         MAX_GIRL_SNOWBALL = FPS * 5
+        BUFF_SOUND_EFFECT.play()
     if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
         MAX_GIRL_SNOWBALL -= 1
     return girl_point + gp
@@ -284,6 +289,8 @@ def main():
 
     clock = pygame.time.Clock()
     run = True
+
+    pygame.mixer.music.play(-1)
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
