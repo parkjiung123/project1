@@ -78,6 +78,8 @@ PENGUIN = pygame.transform.scale(PENGUIN_IMAGE, (55, 45))
 POLARBEAR_IMAGE = pygame.image.load(os.path.join('Source', 'polarbear.png'))
 POLARBEARS = pygame.transform.scale(POLARBEAR_IMAGE, (100, 100))
 
+POLARBEAR2_IMAGE = pygame.image.load(os.path.join('Source', 'polarbear2.png'))
+POLARBEARS2 = pygame.transform.scale(POLARBEAR2_IMAGE, (100, 100))
 
 class Penguin:
     def __init__(self, x, y):
@@ -96,9 +98,13 @@ class Polarbear:
         self.y = y
         self.width = 100
         self.height = 100
+        self.num = random.choice([0, 1])
 
     def draw(self):
-        WIN.blit(POLARBEARS, (self.x, self.y))
+        if self.num == 0:
+            WIN.blit(POLARBEARS, (self.x, self.y))
+        else:
+            WIN.blit(POLARBEARS2, (self.x, self.y))
         self.y += 1
 
 

@@ -8,6 +8,11 @@
 * 키보드 입력으로 눈덩이 던지기 기능
 * 눈덩이에 맞을 시 체력이 깎이는 기능
 
+## Phase2 구현 기능
+* 여러 장애물을 제작 -> 장애물 파괴시 점수 획득(펭귄 1점, 북극곰 2점)
+* 소리 효과들 삽입(배경음악 삽입, buff 모드시 효과음 삽입)
+* 점수가 오르면 buff 모드 진입 -> buff 시 눈 무한대로 던지기 가능(5초)
+
 # Reference
 [1] https://github.com/techwithtim/PygameForBeginners
 
@@ -50,6 +55,11 @@ python3 main.py
 - Description : 화면 위에서 아래로 떨어지는 펭귄 객체를 나타내는 클래스
   1. Def __init__(self,x,y) : 펭귄 객체의 초기 위치를 설정한다. 'x', 'y': 펭귄의 초기 위치 좌표이다.
   2. Def draw(self) : 펭귄을 화면에 그린다. 펭귄의 위치를 업데이트하여 아래로 이동시킨다.
+### class Polarbear:
+- Description : 화면 위에서 아래로 떨어지는 북극곰 객체를 나타내는 클래스
+  1. Def __init__(self,x,y) : 북극곰 객체의 초기 위치를 설정한다. 'x', 'y': 북극곰의 초기 위치 좌표이다.
+  2. Def draw(self) : 북극곰을 화면에 그린다. 북극곰의 위치를 업데이트하여 아래로 이동시킨다.
+  3. self.num : 북극곰의 사진은 총 2개이다. 둘 중 몇 번째 사진을 픽할지 랜덤으로 정한다 
 
 ### Function
 - draw_display
@@ -74,6 +84,9 @@ python3 main.py
 - draw_winner
     1. Parameters: 'text' : 승리 메시지를 나타내는 문자열이다.
     2. Def draw_winner(text) : 게임이 끝났을 때 승자를 화면에 표시한다.
+- set_boy_buff, set_girl_buff
+    1. Parameters: 'boy_point', bp : 현재 boy의 point와 이번 턴에 증가할 포인트이다
+    2. 현재 point가 20점 이상이면 던질 수 있는 눈 갯수를 크게 증가시킨다(5초동안)
 - main
     1. Description : 게임의 메인 함수이다.
     2. Def main() : 게임 초기 설정을 하고, 메인 루프를 실행하여 사용자 입력과 게임 상태를 업데이트하고 화면을 새로 그린다.
