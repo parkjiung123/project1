@@ -19,9 +19,14 @@ BORDER = pygame.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)
 
 THROW_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Throw_Snowball.mp3')
 HIT_SNOW_BALL_SOUND = pygame.mixer.Sound('Source/Hit_Snowball.mp3')
+
+####################################
+############# PHASE 2 ##############
+####################################
 BUFF_SOUND_EFFECT = pygame.mixer.Sound('Source/buff.mp3')
 BUFF_SOUND_EFFECT.set_volume(1)
 pygame.mixer.music.load('Source/normal.mp3')
+####################################
 
 HP_FONT = pygame.font.SysFont('comicsans', 40)
 POINT_FONT = pygame.font.SysFont('comicsans', 30)
@@ -31,8 +36,12 @@ FPS = 60
 SPEED = 5
 SNOWBALL_SPEED = 7
 MAX_SNOWBALL = 2
+####################################
+############# PHASE 2 ##############
+####################################
 MAX_BOY_SNOWBALL = MAX_SNOWBALL
 MAX_GIRL_SNOWBALL = MAX_SNOWBALL
+####################################
 CHARACTER_WIDTH = 60
 CHARACTER_HEIGHT = 50
 
@@ -48,6 +57,9 @@ GIRL_IMAGE = pygame.image.load(
 GIRL = pygame.transform.scale(
     GIRL_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
 
+####################################
+############# PHASE 2 ##############
+####################################
 BOY_BUFF = pygame.transform.scale(
     BOY_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
 GIRL_BUFF = pygame.transform.scale(
@@ -66,6 +78,7 @@ for x in range(width):
     for y in range(height):
         r, g, b, a = GIRL_BUFF.get_at((x, y))
         GIRL_BUFF.set_at((x, y), (r, 0, 0, a))
+####################################
 
 BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join('Source', 'Background.jpg')), (WIDTH, HEIGHT))
 
@@ -75,11 +88,15 @@ SNOWBALL = pygame.transform.scale(SNOWBALL_IMAGE, (20, 20))
 PENGUIN_IMAGE = pygame.image.load(os.path.join('Source', 'Penguin.png'))
 PENGUIN = pygame.transform.scale(PENGUIN_IMAGE, (55, 45))
 
+####################################
+############# PHASE 2 ##############
+####################################
 POLARBEAR_IMAGE = pygame.image.load(os.path.join('Source', 'polarbear.png'))
 POLARBEARS = pygame.transform.scale(POLARBEAR_IMAGE, (100, 100))
 
 POLARBEAR2_IMAGE = pygame.image.load(os.path.join('Source', 'polarbear2.png'))
 POLARBEARS2 = pygame.transform.scale(POLARBEAR2_IMAGE, (100, 100))
+####################################
 
 class Penguin:
     def __init__(self, x, y):
@@ -92,6 +109,9 @@ class Penguin:
         WIN.blit(PENGUIN, (self.x, self.y))
         self.y += 1
 
+####################################
+############# PHASE 2 ##############
+####################################
 class Polarbear:
     def __init__(self, x, y):
         self.x = x
@@ -106,7 +126,7 @@ class Polarbear:
         else:
             WIN.blit(POLARBEARS2, (self.x, self.y))
         self.y += 1
-
+####################################
 
 def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, girl_hp, boy_hp, girl_point, boy_point):
     WIN.blit(BACKGROUND, (0, 0))
@@ -117,10 +137,14 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, g
     WIN.blit(girl_hp_text, (WIDTH - girl_hp_text.get_width() - 10, 10))
     WIN.blit(boy_hp_text, (10, 10))
 
+####################################
+############# PHASE 2 ##############
+####################################
     girl_point_text = POINT_FONT.render("Points: " + str(girl_point), 1, BLACK)
     boy_point_text = POINT_FONT.render("Points: " + str(boy_point), 1, BLACK)
     WIN.blit(girl_point_text, (WIDTH - girl_hp_text.get_width() - girl_point_text.get_width() - 30, 20))
     WIN.blit(boy_point_text, (30 + boy_hp_text.get_width(), 20))
+####################################
 
     if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
         WIN.blit(GIRL_BUFF, (girl.x, girl.y))
@@ -257,7 +281,9 @@ def draw_winner(text):
     pygame.display.update()
     pygame.time.delay(5000)
 
-
+####################################
+############# PHASE 2 ##############
+####################################
 def set_boy_buff(boy_point, bp):
     global MAX_BOY_SNOWBALL, FPS, MAX_SNOWBALL
     if boy_point > 20:
@@ -277,6 +303,7 @@ def set_girl_buff(girl_point, gp):
     if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
         MAX_GIRL_SNOWBALL -= 1
     return girl_point + gp
+####################################
 
 def main():
     girl = pygame.Rect(700, 300, CHARACTER_WIDTH, CHARACTER_HEIGHT)
@@ -285,7 +312,12 @@ def main():
     girl_snowball = []
     boy_snowball = []
     penguins = [Penguin(random.randint(0, WIDTH - 30), 0) for _ in range(5)]
+
+####################################
+############# PHASE 2 ##############
+####################################
     polarbears = [Polarbear(random.randint(0, WIDTH - 30), 0) for _ in range(5)]
+####################################
 
     girl_hp = 10
     boy_hp = 10
@@ -340,17 +372,25 @@ def main():
         boy_handle_movement(keys_pressed, boy)
         girl_handle_movement(keys_pressed, girl)
 
+####################################
+############# PHASE 2 ##############
+####################################
         gp, bp = handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears)
         draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, girl_hp, boy_hp, girl_point, boy_point)
 
         boy_point = set_boy_buff(boy_point, bp)
         girl_point = set_girl_buff(girl_point, gp)
+####################################
 
         if random.randint(0, 200) == 0: 
             penguins.append(Penguin(random.randint(0, WIDTH - 30), 0))
         
+####################################
+############# PHASE 2 ##############
+####################################
         if random.randint(0, 200) == 0: 
             polarbears.append(Polarbear(random.randint(0, WIDTH - 30), 0))
+####################################
 
 if __name__ == "__main__":
     main()
