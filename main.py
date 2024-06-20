@@ -144,7 +144,6 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, g
     boy_point_text = POINT_FONT.render("Points: " + str(boy_point), 1, BLACK)
     WIN.blit(girl_point_text, (WIDTH - girl_hp_text.get_width() - girl_point_text.get_width() - 30, 20))
     WIN.blit(boy_point_text, (30 + boy_hp_text.get_width(), 20))
-####################################
 
     if MAX_GIRL_SNOWBALL > MAX_SNOWBALL:
         WIN.blit(GIRL_BUFF, (girl.x, girl.y))
@@ -155,6 +154,7 @@ def draw_display(girl, boy, girl_snowball, boy_snowball, penguins, polarbears, g
         WIN.blit(BOY_BUFF, (boy.x, boy.y))
     else:
         WIN.blit(BOY, (boy.x, boy.y))
+####################################
 
     for snowball in girl_snowball:
         WIN.blit(SNOWBALL, (snowball.x, snowball.y))
@@ -222,7 +222,7 @@ def handle_snowball(boy_snowball, girl_snowball, boy, girl, penguins, polarbears
             if penguin.x < snowball.x < penguin.x + penguin.width and penguin.y < snowball.y < penguin.y + penguin.height:
                 penguins_to_remove.append(penguin)
                 snowballs_to_remove.append(snowball)
-                # HIT_SNOW_BALL_SOUND.play()
+                HIT_SNOW_BALL_SOUND.play()
                 boy_point += 1
     
     for penguin in penguins:
